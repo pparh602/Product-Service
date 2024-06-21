@@ -5,10 +5,9 @@ import com.product.ProductService.model.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
 public interface ProductService {
 
-    ProductResponse addProduct(ProductRequest productRequest);
+  ProductResponse addProduct(ProductRequest productRequest);
 
-    Page<ProductResponse> getAllProductByCategory(Pageable pageable, String category);
+  Page<ProductResponse> getAllProductByCategory(Pageable pageable, String category);
 }

@@ -6,21 +6,16 @@ import com.product.ProductService.exception.ProductServiceCustomException;
 import com.product.ProductService.model.ProductRequest;
 import com.product.ProductService.model.ProductResponse;
 import com.product.ProductService.repository.ProductRepository;
-import com.product.ProductService.service.ProductService;
 import com.product.ProductService.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 import java.util.*;
@@ -42,7 +37,7 @@ public class ProductServiceTest {
 
     @Test
     void test_AddProduct_Success() {
-        // Create Mock ProductRequest
+        // Arrange
         ProductRequest mockProductRequest = ProductRequest.builder()
                 .name("Red Shirt")
                 .description("Red hugo boss shirt")
@@ -64,7 +59,7 @@ public class ProductServiceTest {
 
         when(productRepository.save(any(Product.class))).thenReturn(mockExpectedProduct);
 
-        // Test the addProduct service
+        // Act
         ProductResponse actualProductResponse = productService.addProduct(mockProductRequest);
 
         // Assert the Response
@@ -78,26 +73,9 @@ public class ProductServiceTest {
 
     }
 
-//    Following case will be handled inside the Integration test
-//    @Test
-//    void test_AddProduct_Invalid_Request_Failure() {
-//        ProductRequest mockInvalidProductRequest = ProductRequest.builder()
-//                .name("")
-//                .description("Red hugo boss shirt")
-//                .tags(List.of("red", "shirt", "slim fit"))
-//                .brand("Hugo Boss")
-//                .category("apparel")
-//                .build();
-//
-//        ProductServiceCustomException exception = assertThrows(ProductServiceCustomException.class, () -> {
-//            productService.addProduct(mockInvalidProductRequest);
-//        });
-//
-//        assertEquals("Invalid product request", exception.getMessage());
-//    }
-
     @Test
     void test_AddProduct_Failure() {
+        // Arrange
         ProductRequest mockProductRequest = ProductRequest.builder()
                 .name("Red Shirt")
                 .description("Red hugo boss shirt")
@@ -106,17 +84,17 @@ public class ProductServiceTest {
                 .category("apparel")
                 .build();
 
-
-
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            // Act
             productService.addProduct(mockProductRequest);
         });
-
+        // Assert the Response
         assertEquals("Something went wrong while saving the product", exception.getMessage());
     }
 
     @Test
     void test_GetAllProductByCategory_Success() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         String category = "Test Category";
 
@@ -137,7 +115,7 @@ public class ProductServiceTest {
         // Act
         Page<ProductResponse> response = productService.getAllProductByCategory(pageable, category);
 
-        // Assert
+        // Assert the Response
         assertNotNull(response);
         assertEquals(1, response.getTotalElements());
         assertEquals(1, response.getContent().size());
@@ -147,6 +125,7 @@ public class ProductServiceTest {
 
     @Test
     void test_GetAllProductByCategory_InvalidCategory_Failure() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         String invalidCategory = "caefw"; // Invalid category (empty)
 
@@ -154,10 +133,11 @@ public class ProductServiceTest {
                 .thenReturn(Page.empty(pageable));
 
         ProductServiceCustomException exception = assertThrows(ProductServiceCustomException.class, () -> {
+            // Act
             productService.getAllProductByCategory(pageable, invalidCategory);
         });
-
-        assertEquals("No products found for category: " + invalidCategory, exception.getMessage()); // Adjust the exception message as per your implementation
+        // Assert the Response
+        assertEquals("No products found for category: " + invalidCategory, exception.getMessage());
     }
 
 

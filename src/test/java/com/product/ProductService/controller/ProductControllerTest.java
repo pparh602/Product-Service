@@ -106,7 +106,7 @@ public class ProductControllerTest{
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidProductRequest)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("Product name is required")); // Adjust the validation message according to your implementation
+                .andExpect(jsonPath("$.name").value("Product name is required"));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class ProductControllerTest{
                         .param("page", "0")
                         .param("size", "10")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorMessage").value("No products found for category: stationary")); // Adjust the message according to your exception handling
+                .andExpect(jsonPath("$.errorMessage").value("No products found for category: stationary"));
     }
 
     @Test
