@@ -77,7 +77,7 @@ curl --location 'http://localhost:35795/v1/product' \
 ### Search a Product By Category
 
 ```bash
-curl --location 'http://localhost:8080/v1/product?category=apparel'
+curl --location 'http://localhost:8080/v1/product?category=apparel&page=0&size=5'
 ```
 
 ### Testing
