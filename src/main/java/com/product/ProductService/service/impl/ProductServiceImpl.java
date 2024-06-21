@@ -53,9 +53,10 @@ public class ProductServiceImpl implements ProductService {
     Page<Product> productPage =
         productRepository.findByCategoryOrderByCreatedAtDesc(category, pageable);
 
-    if (productPage.isEmpty()) {
-      throw new ProductServiceCustomException(
-          "No products found for category: " + category, HttpStatus.NOT_FOUND.toString());
+    // Check if the requested page number is out of bounds
+    if (pageable.getPageNumber() >= productPage.getTotalPages()) {
+      // Return an empty page if the requested page number is out of bounds
+      return Page.empty(pageable);
     }
 
     List<ProductResponse> productResponses =

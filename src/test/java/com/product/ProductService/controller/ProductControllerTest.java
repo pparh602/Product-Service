@@ -146,12 +146,14 @@ public class ProductControllerTest{
                         .param("page", "0")
                         .param("size", "10")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorMessage").value("No products found for category: stationary"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.empty").value(true));
     }
 
     @Test
     @DisplayName("Test the order for the search product by valid category: Success")
-
     void test_Order_Of_Search_ProductBy_Category_Success() throws Exception {
         mockMvc.perform(get("/v1/product")
                         .param("category", "apparel")
@@ -162,5 +164,19 @@ public class ProductControllerTest{
                 .andExpect(jsonPath("$.content.length()").value(2)) // Ensure correct number of results per page
                 .andExpect(jsonPath("$.content[0].name").value("UFC Shirt")) // Verify sorting by createdAt
                 .andExpect(jsonPath("$.content[1].name").value("Thala Shirt"));
+    }
+
+    @Test
+    @DisplayName("Get Products with valid category and out-of-bounds page: Empty Result")
+    void test_Search_ProductByCategory_ValidCategory_OutOfBoundsPage() throws Exception {
+        mockMvc.perform(get("/v1/product")
+                        .param("category", "apparel")
+                        .param("page", "5")
+                        .param("size", "5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.empty").value(true));
     }
 }

@@ -2,7 +2,6 @@ package com.product.ProductService.service;
 
 
 import com.product.ProductService.entity.Product;
-import com.product.ProductService.exception.ProductServiceCustomException;
 import com.product.ProductService.model.ProductRequest;
 import com.product.ProductService.model.ProductResponse;
 import com.product.ProductService.repository.ProductRepository;
@@ -132,15 +131,31 @@ public class ProductServiceTest {
         when(productRepository.findByCategoryOrderByCreatedAtDesc(eq(invalidCategory), any(Pageable.class)))
                 .thenReturn(Page.empty(pageable));
 
-        ProductServiceCustomException exception = assertThrows(ProductServiceCustomException.class, () -> {
-            // Act
-            productService.getAllProductByCategory(pageable, invalidCategory);
-        });
-        // Assert the Response
-        assertEquals("No products found for category: " + invalidCategory, exception.getMessage());
+        // Act
+        Page<ProductResponse> result = productService.getAllProductByCategory(pageable, invalidCategory);
+
+        // Assert
+        assertTrue(result.isEmpty());
+        assertEquals(0, result.getNumberOfElements());
+        assertEquals(0, result.getNumber());
+        assertEquals(0, result.getTotalElements());
     }
 
+    @Test
+    void test_Search_ProductByCategory_ValidCategory_OutOfBoundsPage() {
+        // Arrange
+        Pageable pageable = PageRequest.of(5, 5);
 
+        when(productRepository.findByCategoryOrderByCreatedAtDesc("apparel", pageable))
+                .thenReturn(Page.empty(pageable));
 
+        // Act
+        Page<ProductResponse> result = productService.getAllProductByCategory(pageable, "apparel");
 
+        // Assert
+        assertTrue(result.isEmpty());
+        assertEquals(0, result.getNumberOfElements());
+        assertEquals(5, result.getNumber());
+        assertEquals(0, result.getTotalElements());
+    }
 }
