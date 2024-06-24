@@ -22,4 +22,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(OrderServiceCustomException.class)
+    public ResponseEntity<ErrorResponse> handleOrderServiceException(OrderServiceCustomException exception) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorCode(exception.getErrorCode())
+                .errorMessage(exception.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

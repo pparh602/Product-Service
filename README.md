@@ -51,8 +51,13 @@ The Product Service is a Spring Boot application designed to manage and retrieve
 
 The service exposes the following REST endpoints:
 
-- `POST /v1/product`: Add a new product.
-- `GET /v1/product`: Search products by category with pagination.
+    - `POST /v1/product`: Add a new product.
+    - `GET /v1/product`: Search products by category with pagination.
+    - `POST /v1/orders/complete`: Add Completed Order
+    - `POST /v1/orders/pending`: Add Pending Order
+- `GET /v1/orders/combined`: Get combined result from Pending and Completed Order with pagination
+
+
 
 ### Examples: Postman Curls
 
@@ -78,6 +83,11 @@ curl --location 'http://localhost:35795/v1/product' \
 
 ```bash
 curl --location 'http://localhost:8080/v1/product?category=apparel&page=0&size=5'
+```
+
+### Get combined orders filter by date
+```bash
+curl --location 'http://localhost:8080/v1/orders/?startDate=2023-01-21&endDate=2025-01-01&page=555&size=10&sortField=amount&isSortDesc=true'
 ```
 
 ### Testing
