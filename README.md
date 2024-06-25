@@ -51,27 +51,62 @@ The Product Service is a Spring Boot application designed to manage and retrieve
 
 The service exposes the following REST endpoints:
 
-    - `POST /v1/product`: Add a new product.
-    - `GET /v1/product`: Search products by category with pagination.
-    - `POST /v1/orders/complete`: Add Completed Order
-    - `POST /v1/orders/pending`: Add Pending Order
+- `POST /v1/product`: Add a new product.
+- `GET /v1/product`: Search products by category with pagination.
+- `POST /v1/orders/complete`: Add Completed Order
+- `POST /v1/orders/pending`: Add Pending Order
 - `GET /v1/orders/combined`: Get combined result from Pending and Completed Order with pagination
 
 
+### Get Combined Orders
 
-### Examples: Postman Curls
+**Endpoint:** `/v1/orders/`
 
-#### Add a Product 
+**Method:** `GET`
 
+**Description:** Retrieves a combined list of pending and completed orders, with pagination and sorting.
+
+**Query Parameters:**
+- `page`: (optional) Page number (default is 0).
+- `size`: (optional) Number of records per page (default is 10).
+- `sort`: (optional) Sorting criteria in the format `property,direction` (e.g., `orderDate,desc`).
+
+**Curl Request:**
 ```bash
-curl --location 'http://localhost:35795/v1/product' \
+curl --location 'http://localhost:8080/v1/orders/combined?startDate=2023-01-21&endDate=2025-01-01&page=0&size=10&sortField=amount&isSortDesc=true'
+```
+
+### Search a Product By Category
+
+**Endpoint:** `/v1/product`
+
+**Method:** `GET`
+
+**Description:** Retrieves a list of products, with pagination.
+
+**Curl Request:**
+```bash
+curl --location 'http://localhost:8080/v1/product?category=apparel&page=0&size=5'
+```
+
+### Add Product
+
+**Endpoint:** `/v1/product`
+
+**Method:** `POST`
+
+**Description:** Add Product.
+
+**Curl Request:**
+```bash
+curl --location 'http://localhost:8080/v1/product' \
 --header 'Content-Type: application/json' \
 --data '{
-    "name": "Red Shirt",
-    "description": "Red hugo boss shirt",
-    "brand": "Hugo Boss",
+    "name": "plum Shirt",
+    "description": "yellow hugo boss shirt",
+    "brand": "O'\''Reilly Group",
     "tags": [
-        "olive",
+        "sky blue",
         "shirt",
         "slim fit"
     ],
@@ -79,15 +114,46 @@ curl --location 'http://localhost:35795/v1/product' \
 }'
 ```
 
-### Search a Product By Category
+### Add Complete Order
 
+**Endpoint:** `/v1/orders/complete`
+
+**Method:** `POST`
+
+**Description:** Add Complete Order.
+
+**Curl Request:**
 ```bash
-curl --location 'http://localhost:8080/v1/product?category=apparel&page=0&size=5'
+curl --location 'http://localhost:8080/v1/orders/complete' \
+--header 'Content-Type: application/json' \
+--data '{
+    "quantity": "10",
+    "productName": "Rustic Steel Pizza",
+    "orderDate": "2024-02-21T10:15:30Z",
+    "orderStatus": "Completed",
+    "amount": 77
+}'
 ```
 
-### Get combined orders filter by date
+### Add Pending Order
+
+**Endpoint:** `/v1/orders/pending`
+
+**Method:** `POST`
+
+**Description:** Add Pending Order.
+
+**Curl Request:**
 ```bash
-curl --location 'http://localhost:8080/v1/orders/?startDate=2023-01-21&endDate=2025-01-01&page=555&size=10&sortField=amount&isSortDesc=true'
+curl --location 'http://localhost:8080/v1/orders/pending' \
+--header 'Content-Type: application/json' \
+--data '{
+    "quantity": "6",
+    "productName": "Small Wooden Chicken",
+    "orderDate": "2024-02-21T10:15:30Z",
+    "orderStatus": "Completed",
+    "amount": 626
+}'
 ```
 
 ### Testing
