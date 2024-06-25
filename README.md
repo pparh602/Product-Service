@@ -60,16 +60,20 @@ The service exposes the following REST endpoints:
 
 ### Get Combined Orders
 
-**Endpoint:** `/v1/orders/`
+**Endpoint:** `/v1/orders/combined`
 
 **Method:** `GET`
 
-**Description:** Retrieves a combined list of pending and completed orders, with pagination and sorting.
+**Description:** Retrieves a combined list of pending and completed orders, with pagination and sorting, filter by startDate and endDate.
 
 **Query Parameters:**
 - `page`: (optional) Page number (default is 0).
 - `size`: (optional) Number of records per page (default is 10).
-- `sort`: (optional) Sorting criteria in the format `property,direction` (e.g., `orderDate,desc`).
+- `sortField`: (optional) Sorting by field name eg amount, orderDate etc.
+- `isSortDesc`: (optional) Sorting by ASC or DESC order.
+- `startDate`: (required) Filters Order by Start Date (yyyy-MM-dd) 
+- `endDate`: (required) Filters Order by End Date (yyyy-MM-dd) 
+
 
 **Curl Request:**
 ```bash
